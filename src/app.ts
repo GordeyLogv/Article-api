@@ -2,9 +2,9 @@ import express, { Express } from "express";
 import { Server } from "http";
 import { inject, injectable } from "inversify";
 import { TYPES } from "./types.js";
-import bodyParser from "body-parser";
 import { ILoggerService } from "./common/logger/logger.service.interface.js";
 import { IConfigService } from "./common/config/config.service.interface.js";
+import { IExceptionFilter } from "./common/errors/exception.filter.interface.js";
 
 
 @injectable()
@@ -16,7 +16,8 @@ export class App {
 
     constructor(
         @inject(TYPES.LoggerService) private logger: ILoggerService,
-        @inject(TYPES.ConfigService) private config: IConfigService 
+        @inject(TYPES.ConfigService) private config: IConfigService,
+        @inject(TYPES.ExceptionFilter) private exceptionFilter: IExceptionFilter
     ) {
         this.app = express();
         this.PORT = this.config.port;
@@ -24,14 +25,18 @@ export class App {
 
         this.useMiddleware();
         this.useRoutes();
+        this.useExceptionFilter();
     }
 
     public useMiddleware() {
         this.app.use(express.json());
-        this.app.use(bodyParser.json());
     }
 
     public useRoutes() {}
+
+    public useExceptionFilter() {
+        this.app.use(this.exceptionFilter.catch.bind(this.exceptionFilter));
+    }
 
     public init() {
         this.server = this.app.listen(this.PORT);
