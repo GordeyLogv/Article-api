@@ -5,7 +5,7 @@ import { TYPES } from "../types.js";
 import { ILoggerService } from "../common/logger/logger.service.interface.js";
 import { IExceptionFilter } from "../common/errors/exception.filter.interface.js";
 import { IConfigService } from "../common/config/config.service.interface.js";
-
+import { Request, Response, NextFunction } from "express";
 
 @injectable()
 export class ArticleController extends BaseController implements IArticleController {
@@ -50,7 +50,7 @@ export class ArticleController extends BaseController implements IArticleControl
         ])
     }
 
-    async getAllArticle() {
+    async getAllArticle(req: Request, res: Response, next: NextFunction) {
 
     }
 

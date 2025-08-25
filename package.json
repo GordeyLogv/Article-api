@@ -7,7 +7,9 @@
   "scripts": {
     "start": "node ./dist/main.js",
     "build": "tsc",
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "generate": "prisma generate",
+    "studio": "npx prisma studio"
   },
   "keywords": [],
   "author": "",
