@@ -3,6 +3,7 @@ import { IArticleRepository } from "./article.repository.interface.js";
 import { TYPES } from "../types.js";
 import { Article } from "./article.entity.js";
 import { PrismaService } from "../common/database/prisma.service.js";
+import { ArticleUpdateDto } from "./dto/article-update.js";
 
 @injectable()
 export class ArticleRepository implements IArticleRepository {
@@ -22,59 +23,61 @@ export class ArticleRepository implements IArticleRepository {
             },
         });
 
-        return new Article({
-            title: created.title,
-            content: created.content,
-            imageUrl: created.imageUrl
-        });
+        return Article.restore(created);
     }
 
     public async findById(id: number): Promise<Article | null> {
-        const data = await this.prismaService.articleModel.findUnique({
+        const findArticle = await this.prismaService.articleModel.findUnique({
             where: { id }
         });
 
-        if (!data) {
+        if (!findArticle) {
             return null;
         };
 
-        return new Article({
-            title: data.title,
-            content: data.content,
-            imageUrl: data.imageUrl
-        });
+        return Article.restore(findArticle);
     }
 
     public async findAll(): Promise<Article[]> {
-        const data = await this.prismaService.articleModel.findMany();
+        const findAllArticle = await this.prismaService.articleModel.findMany();
 
-        return data.map(i => new Article({
-            title: i.title,
-            content: i.content,
-            imageUrl: i.imageUrl
-        }));
+        return findAllArticle.map((a) => Article.restore(a));
     }
 
-    public async update(id: number, article: Partial<Article>): Promise<Article> {
+    public async update(id: number, dto: ArticleUpdateDto): Promise<Article> {
         const data = await this.prismaService.articleModel.update({
             where: { id },
             data: {
-                title: article.title,
-                content: article.content,
-                imageUrl: article.imageUrl
+            ...(dto.title && { title: dto.title }),
+            ...(dto.content && { content: dto.content }),
+            ...(dto.imageUrl && { imageUrl: dto.imageUrl }),
             }
         });
 
-        return new Article({
-            title: data.title,
-            content: data.content,
-            imageUrl: data.imageUrl
-        });
+        return Article.restore(data);
     }
 
-    public async delete(id: number) {
+    public async delete(id: number): Promise<void> {
         await this.prismaService.articleModel.delete({
             where: { id }
         });
+    }
+
+    public async incrementViews(id: number): Promise<Article> {
+        const updateViews = await this.prismaService.articleModel.update({
+            where: { id },
+            data: { views: { increment: 1 } }
+        });
+
+        return Article.restore(updateViews);
+    }
+
+    public async incrementLikes(id: number): Promise<Article> {
+        const updateLikes = await this.prismaService.articleModel.update({
+            where: { id },
+            data: { likes: { increment: 1 } }
+        });
+
+        return Article.restore(updateLikes);
     }
 }
