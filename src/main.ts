@@ -12,6 +12,9 @@ import { PrismaService } from "./common/database/prisma.service.js";
 import { IArticleRepository } from "./article/article.repository.interface.js";
 import { ArticleRepository } from "./article/article.repository.js";
 import { IArticleService } from "./article/article.service.interface.js";
+import { IArticleController } from "./article/article.controller.interface.js";
+import { ArticleController } from "./article/article.controller.js";
+import { ArticleService } from "./article/article.service.js";
 
 
 const bootstrap = () => {
@@ -23,7 +26,8 @@ const bootstrap = () => {
     appContainer.bind<IExceptionFilter>(TYPES.ExceptionFilter).to(ExceptionFilter).inSingletonScope();
     appContainer.bind<PrismaService>(TYPES.PrismaService).to(PrismaService);
     appContainer.bind<IArticleRepository>(TYPES.ArticleRepository).to(ArticleRepository);
-    appContainer.bind<IArticleService>(TYPES.ArticleService);
+    appContainer.bind<IArticleService>(TYPES.ArticleService).to(ArticleService);
+    appContainer.bind<IArticleController>(TYPES.ArticleController).to(ArticleController);
 
     const app = appContainer.get<App>(TYPES.Application);
 

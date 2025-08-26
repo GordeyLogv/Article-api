@@ -45,16 +45,24 @@ export class Article {
         return article;
     }
 
+    public toJson() {
+        return {
+            id: this._id,
+            title: this._title,
+            content: this._content,
+            imageUrl: this._imageUrl,
+            views: this._views,
+            likes: this._likes,
+            createdAt: this._createdAt
+        };
+    }
+
     public incrementViews() {
         this._views += 1;
     }
 
     public incrementLike() {
         this._likes += 1;
-    }
-
-    public setId(id: number) {
-        this._id = id;
     }
 
     public get id() {

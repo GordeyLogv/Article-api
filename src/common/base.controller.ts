@@ -28,4 +28,19 @@ export abstract class BaseController {
             this.router[route.method](route.path, pipeline);
         }
     }
+
+    protected ok<T>(res: Response, data: T): void {
+        res.status(200);
+        res.json(data);
+    }
+
+    protected created<T>(res: Response, data: T): void {
+        res.status(201);
+        res.json(data);
+    }
+
+    protected fail(res: Response, message: string): void {
+        res.status(400);
+        res.json({ status: 'error', message });
+    }
 }

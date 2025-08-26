@@ -14,7 +14,7 @@ export class ExceptionFilter implements IExceptionFilter {
         this.logger.info(`[ExceptionFilter] - загружен`)
     }
 
-    catch(err: unknown, req: Request, res: Response, next: NextFunction) {
+    public catch(err: unknown, req: Request, res: Response, next: NextFunction) {
         if (err instanceof HTTPError) {
             this.logger.error(`Ошибка ${err.statusCode} - ${err.message} : ${err.contex}`);
             res.status(err.statusCode);

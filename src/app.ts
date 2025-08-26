@@ -5,6 +5,7 @@ import { TYPES } from "./types.js";
 import { ILoggerService } from "./common/logger/logger.service.interface.js";
 import { IConfigService } from "./common/config/config.service.interface.js";
 import { IExceptionFilter } from "./common/errors/exception.filter.interface.js";
+import { ArticleController } from "./article/article.controller.js";
 
 
 @injectable()
@@ -17,7 +18,8 @@ export class App {
     constructor(
         @inject(TYPES.LoggerService) private logger: ILoggerService,
         @inject(TYPES.ConfigService) private config: IConfigService,
-        @inject(TYPES.ExceptionFilter) private exceptionFilter: IExceptionFilter
+        @inject(TYPES.ExceptionFilter) private exceptionFilter: IExceptionFilter,
+        @inject(TYPES.ArticleController) private articleController: ArticleController
     ) {
         this.app = express();
         this.PORT = this.config.port;
@@ -32,7 +34,9 @@ export class App {
         this.app.use(express.json());
     }
 
-    public useRoutes() {}
+    public useRoutes() {
+        this.app.use('/api', this.articleController.router);
+    }
 
     public useExceptionFilter() {
         this.app.use(this.exceptionFilter.catch.bind(this.exceptionFilter));
