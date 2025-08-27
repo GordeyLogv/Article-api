@@ -1,13 +1,14 @@
-import { Article } from "./article.entity.js";
+import { ArticleModel } from "@prisma/client";
 import { ArticleCreateDto } from "./dto/article-create.js";
 import { ArticleUpdateDto } from "./dto/article-update.js";
 
 export interface IArticleService {
-    createArticle: (dto: ArticleCreateDto) => Promise<Article>;
-    getArticleById: (id: number) => Promise<Article | null>;
-    getAllArticles: () => Promise<Article[]>;
-    updateArticle: (id: number, dto: ArticleUpdateDto) => Promise<Article>;
-    deleteArticle: (id: number) => Promise<void>;
-    incrementViews: (id: number) => Promise<Article>;
-    incrementLikes: (id: number) => Promise<Article>;
+    createArticle: (dto: ArticleCreateDto) => Promise<boolean>;
+    getArticleById: (id: number) => Promise<ArticleModel | null>;
+    getAllArticles: () => Promise<ArticleModel[]>;
+    updateArticle: (id: number, dto: ArticleUpdateDto) => Promise<boolean | null>;
+    deleteArticle: (id: number) => Promise<boolean | null>;
+    incrementViews: (id: number) => Promise<boolean | null>;
+    incrementLikes: (id: number) => Promise<boolean | null>;
+    descrementLikes: (id: number) => Promise<boolean | null>;
 }

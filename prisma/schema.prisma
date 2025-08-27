@@ -12,7 +12,7 @@ model ArticleModel {
   title String
   content String
   imageUrl String
-  views Int @default(0)
-  likes Int @default(0)
-  createdAt DateTime @default(now())
+  views Int
+  likes Int
+  createdAt DateTime
 }

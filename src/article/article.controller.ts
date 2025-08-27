@@ -10,6 +10,7 @@ import { ValidationMiddleware } from "../middleware/validation.middleware.js";
 import { ArticleCreateDto } from "./dto/article-create.js";
 import { ArticleUpdateDto } from "./dto/article-update.js";
 import { IArticleService } from "./article.service.interface.js";
+import { HTTPError } from "../common/errors/HTTPError.js";
 
 @injectable()
 export class ArticleController extends BaseController implements IArticleController {
@@ -25,7 +26,7 @@ export class ArticleController extends BaseController implements IArticleControl
             {
                 path: '/articles',
                 method: 'get',
-                func: this.getAllArticle,
+                func: this.getAllArticles,
                 middleware: []
             },
             {
@@ -55,56 +56,46 @@ export class ArticleController extends BaseController implements IArticleControl
         ])
     }
 
-    async getAllArticle(req: Request, res: Response, next: NextFunction) {
-        try {
-            const AllArticle = await this.articleService.getAllArticles();
-            this.ok(res, AllArticle.map(a => a.toJson()));
-        } catch (error) {
-            next(error);
-        }
+    async getAllArticles(req: Request, res: Response, next: NextFunction): Promise<void> {
+        const allArticles = await this.articleService.getAllArticles();
+        
+        this.ok(res, allArticles);
     }
 
-    async getArticle({ params }: Request<{ id: string }>, res: Response, next: NextFunction) {
-        const articleId = Number(params.id);
-        try {
-            const findArticle = await this.articleService.getArticleById(articleId);
-            
-            if (!findArticle) {
-                return this.fail(res, `Статья с таким id - ${articleId} не найдена`);
-            }
+    async getArticle({ params }: Request<{ id: string }>, res: Response, next: NextFunction): Promise<void> {
+        const article = await this.articleService.getArticleById(Number(params.id));
 
-            this.ok(res, findArticle.toJson());
-        } catch (error) {
-            next(error);    
+        if (article === null) {
+            throw new HTTPError(404, `Статья с id - ${params.id} не найдена`, 'getArticle');
         }
+
+        this.ok(res, article);
     }
 
     async addArticle({ body }: Request<{}, {}, ArticleCreateDto>, res: Response, next: NextFunction): Promise<void> {
-        try {
-            const newArticle = await this.articleService.createArticle(body);
-            this.created(res, newArticle.toJson());
-        } catch (error) {
-            next(error);
+        const newArticle = await this.articleService.createArticle(body);
+
+        if (newArticle === false) {
+            throw new HTTPError(422, 'Проверьте введёные данные', 'addArticle');
         }
+        this.created(res, `Статья создана`);
     }
 
     async updateArticle({ body, params }: Request<{ id: string }, {}, ArticleUpdateDto>, res: Response, next: NextFunction): Promise<void> {
-        const articleId = Number(params.id);
-        try {
-            const updateArticle = await this.articleService.updateArticle(articleId, body);
-            this.ok(res, updateArticle.toJson());
-        } catch (error) {
-            next(error);
+        const updated = await this.articleService.updateArticle(Number(params.id), body);
+
+        if (!updated) {
+            throw new HTTPError(404, `Статья с id - ${params.id} не найдена`, 'updatedArticle');
         }
+        this.created(res, 'Статья обновлена');
     }
 
-    async deleteArticle({ params }: Request<{ id: string }>, res: Response, next: NextFunction) {
-        const articleId = Number(params.id);
-        try {
-            await this.articleService.deleteArticle(articleId);
-            this.ok(res, { message: `Статья с id - ${articleId} удалена` });
-        } catch (error) {
-            next(error);
+    async deleteArticle({ params }: Request<{ id: string }>, res: Response, next: NextFunction): Promise<void> {
+        const deleted = await this.articleService.deleteArticle(Number(params.id));
+
+        if (!deleted) {
+            throw new HTTPError(404, `Статья с id - ${params.id} не найдена`, 'deleteArticle');
         }
+        this.created(res, 'Статья удалена');
     }
 }

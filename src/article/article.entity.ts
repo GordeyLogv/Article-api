@@ -2,24 +2,20 @@ export class Article {
     private _title: string;
     private _content: string;
     private _imageUrl: string;
-    
+
     private _id?: number;
-    private _views: number;
-    private _likes: number;
-    private _createdAt: Date;
+    private _createdAt: Date = new Date(); 
+    private _views: number = 0;
+    private _likes: number = 0;
 
     constructor(data: {
-        title: string,
-        content: string,
-        imageUrl: string
+        title: string;
+        content: string;
+        imageUrl: string;
     }) {
         this._title = data.title;
         this._content = data.content;
         this._imageUrl = data.imageUrl;
-        
-        this._views = 0;
-        this._likes = 0;
-        this._createdAt = new Date();
     }
 
     public static restore(data: {
@@ -30,7 +26,7 @@ export class Article {
         views: number;
         likes: number;
         createdAt: Date;
-    }): Article {
+    }) {
         const article = new Article({
             title: data.title,
             content: data.content,
@@ -38,9 +34,9 @@ export class Article {
         });
 
         article._id = data.id;
+        article._createdAt = data.createdAt;
         article._views = data.views;
         article._likes = data.likes;
-        article._createdAt = data.createdAt;
 
         return article;
     }
@@ -58,23 +54,27 @@ export class Article {
     }
 
     public incrementViews() {
-        this._views += 1;
+        return this._views++;
     }
 
-    public incrementLike() {
-        this._likes += 1;
+    public incrementLikes() {
+        return this._likes++;
     }
 
-    public get id() {
-        return this._id;
+    public descrementLikes() {
+        return this._likes--;
     }
 
     public get title() {
         return this._title;
     }
 
-    public get createdAt() {
-        return this._createdAt;
+    public get content() {
+        return this._content;
+    }
+
+    public get imageUrl() {
+        return this._imageUrl;
     }
 
     public get views() {
@@ -85,11 +85,7 @@ export class Article {
         return this._likes;
     }
 
-    public get content() {
-        return this._content;
-    }
-
-    public get imageUrl() {
-        return this._imageUrl;
+    public get createdAt() {
+        return this._createdAt;
     }
 }

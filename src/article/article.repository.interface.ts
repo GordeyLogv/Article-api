@@ -1,12 +1,14 @@
 import { Article } from "./article.entity.js";
 import { ArticleUpdateDto } from "./dto/article-update.js";
+import { ArticleModel } from "@prisma/client";
 
 export interface IArticleRepository {
-    create: (article: Article) => Promise<Article>;
-    findById: (id: number) => Promise<Article | null>;
-    findAll: () => Promise<Article[]>;
-    update: (id: number, dto: ArticleUpdateDto) => Promise<Article>;
-    delete: (id: number) => Promise<void>;
-    incrementViews: (id: number) => Promise<Article>;
-    incrementLikes: (id: number) => Promise<Article>
+    create: (article: Article) => Promise<boolean>;
+    findById: (id: number) => Promise<ArticleModel | null>;
+    findAll: () => Promise<ArticleModel[]>;
+    update: (id: number, dto: ArticleUpdateDto) => Promise<boolean | null>;
+    delete: (id: number) => Promise<boolean | null>;
+    incrementViews: (id: number) => Promise<boolean | null>;
+    incrementLikes: (id: number) => Promise<boolean | null>;
+    descrementLikes: (id: number) => Promise<boolean | null>;
 }

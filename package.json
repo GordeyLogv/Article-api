@@ -8,6 +8,7 @@
     "start": "node ./dist/main.js",
     "build": "tsc",
     "dev": "nodemon",
+    "migrate": "npx prisma migrate dev",
     "generate": "prisma generate",
     "studio": "npx prisma studio"
   },
