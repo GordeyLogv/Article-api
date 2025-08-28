@@ -5,14 +5,14 @@ export class ArticleUpdateDto {
     @IsOptional()
     @IsString()
     @IsNotEmpty({ message: 'Название статьи не должно быть пустым' })
-    title: string;
+    title?: string;
 
     @IsOptional()
     @IsString()
     @IsNotEmpty({ message: 'Текст статьи не должен быть пустым' })
-    content: string;
+    content?: string;
 
     @IsOptional()
     @IsUrl({}, { message: 'Ссылка на картинку должна быть корректным URL' })
-    imageUrl: string;
+    imageUrl?: string;
 }

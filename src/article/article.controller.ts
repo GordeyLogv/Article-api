@@ -9,15 +9,13 @@ import { Request, Response, NextFunction } from "express";
 import { ValidationMiddleware } from "../middleware/validation.middleware.js";
 import { ArticleCreateDto } from "./dto/article-create.js";
 import { ArticleUpdateDto } from "./dto/article-update.js";
-import { IArticleService } from "./article.service.interface.js";
+import { IArticleService } from "./service/article.service.interface.js";
 import { HTTPError } from "../common/errors/HTTPError.js";
 
 @injectable()
 export class ArticleController extends BaseController implements IArticleController {
     constructor(
         @inject(TYPES.LoggerService) logger: ILoggerService,
-        @inject(TYPES.ExceptionFilter) private ExceptionFilter: IExceptionFilter,
-        @inject(TYPES.ConfigService) private config: IConfigService,
         @inject(TYPES.ArticleService) private articleService: IArticleService
     ) {
         super(logger);

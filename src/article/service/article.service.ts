@@ -1,11 +1,11 @@
 import { inject, injectable } from "inversify";
 import { IArticleService } from "./article.service.interface.js";
-import { TYPES } from "../types.js";
-import { IArticleRepository } from "./article.repository.interface.js";
-import { ArticleCreateDto } from "./dto/article-create.js";
-import { Article } from "./article.entity.js";
+import { TYPES } from "../../types.js";
+import { IArticleRepository } from "../repository/article.repository.interface.js";
+import { ArticleCreateDto } from "../dto/article-create.js";
+import { Article } from "../entity/article.entity.js";
 import { ArticleModel } from "@prisma/client";
-import { ArticleUpdateDto } from "./dto/article-update.js";
+import { ArticleUpdateDto } from "../dto/article-update.js";
 
 @injectable()
 export class ArticleService implements IArticleService {
@@ -40,7 +40,7 @@ export class ArticleService implements IArticleService {
     public async deleteArticle(id: number): Promise<boolean | null> {
         const isDelete = await this.articleRepository.delete(id);
 
-        return isDelete === true ? true : null;
+        return isDelete ? true : null;
     }
 
     public async incrementViews(id: number): Promise<boolean | null> {

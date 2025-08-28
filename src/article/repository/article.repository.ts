@@ -1,10 +1,10 @@
 import { inject, injectable } from "inversify";
 import { IArticleRepository } from "./article.repository.interface.js";
-import { TYPES } from "../types.js";
-import { PrismaService } from "../common/database/prisma.service.js";
-import { Article } from "./article.entity.js";
+import { TYPES } from "../../types.js";
+import { PrismaService } from "../../common/database/prisma.service.js";
+import { Article } from "../entity/article.entity.js";
 import { ArticleModel } from "@prisma/client";
-import { ArticleUpdateDto } from "./dto/article-update.js";
+import { ArticleUpdateDto } from "../dto/article-update.js";
 
 @injectable()
 export class ArticleRepository implements IArticleRepository {
@@ -39,7 +39,7 @@ export class ArticleRepository implements IArticleRepository {
         return findAll;
     }
 
-    public async update(id: number, dto: ArticleUpdateDto): Promise<boolean | null> {
+    public async update(id: number, data: ArticleUpdateDto): Promise<boolean | null> {
         const findArticle = await this.findById(id);
         
         if (!findArticle) {
@@ -47,9 +47,9 @@ export class ArticleRepository implements IArticleRepository {
         }
 
         const newData = {
-            ...(dto.title && { title: dto.title }),
-            ...(dto.content && { content: dto.content }),
-            ...(dto.imageUrl && { imageUrl: dto.imageUrl })
+            ...(data.title && { title: data.title }),
+            ...(data.content && { content: data.content }),
+            ...(data.imageUrl && { imageUrl: data.imageUrl })
         };
 
         await this.prismaService.articleModel.update({

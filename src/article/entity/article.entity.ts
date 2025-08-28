@@ -18,40 +18,6 @@ export class Article {
         this._imageUrl = data.imageUrl;
     }
 
-    public static restore(data: {
-        id: number;
-        title: string;
-        content: string;
-        imageUrl: string;
-        views: number;
-        likes: number;
-        createdAt: Date;
-    }) {
-        const article = new Article({
-            title: data.title,
-            content: data.content,
-            imageUrl: data.imageUrl
-        });
-
-        article._id = data.id;
-        article._createdAt = data.createdAt;
-        article._views = data.views;
-        article._likes = data.likes;
-
-        return article;
-    }
-
-    public toJson() {
-        return {
-            id: this._id,
-            title: this._title,
-            content: this._content,
-            imageUrl: this._imageUrl,
-            views: this._views,
-            likes: this._likes,
-            createdAt: this._createdAt
-        };
-    }
 
     public incrementViews() {
         return this._views++;

@@ -3,4 +3,5 @@ export interface IConfigService {
 
     readonly port: number;
     readonly host: string;
+    readonly salt: number;
 }

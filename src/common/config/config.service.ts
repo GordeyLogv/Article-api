@@ -50,4 +50,15 @@ export class ConfigService implements IConfigService {
     get host(): string {
         return this.get('HOST');
     }
+
+    get salt(): number {
+        const SALT = Number(this.get('SALT'));
+
+        if (isNaN(SALT)) {
+            this.logger.error(`[ConfigService] - SALT не число : ${SALT}`);
+            throw new HTTPError(500, `SALT не число : ${SALT}`, 'ConfigService');
+        };
+
+        return SALT;
+    }
 }

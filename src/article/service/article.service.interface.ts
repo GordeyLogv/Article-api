@@ -1,6 +1,6 @@
 import { ArticleModel } from "@prisma/client";
-import { ArticleCreateDto } from "./dto/article-create.js";
-import { ArticleUpdateDto } from "./dto/article-update.js";
+import { ArticleCreateDto } from "../dto/article-create.js";
+import { ArticleUpdateDto } from "../dto/article-update.js";
 
 export interface IArticleService {
     createArticle: (dto: ArticleCreateDto) => Promise<boolean>;
