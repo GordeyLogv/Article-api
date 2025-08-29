@@ -3,22 +3,28 @@ import { BaseController } from "../common/base.controller.js";
 import { IArticleController } from "./article.controller.interface.js";
 import { TYPES } from "../types.js";
 import { ILoggerService } from "../common/logger/logger.service.interface.js";
-import { IExceptionFilter } from "../common/errors/exception.filter.interface.js";
-import { IConfigService } from "../common/config/config.service.interface.js";
 import { Request, Response, NextFunction } from "express";
 import { ValidationMiddleware } from "../middleware/validation.middleware.js";
 import { ArticleCreateDto } from "./dto/article-create.js";
 import { ArticleUpdateDto } from "./dto/article-update.js";
 import { IArticleService } from "./service/article.service.interface.js";
 import { HTTPError } from "../common/errors/HTTPError.js";
+import { AuthMiddleware } from "../middleware/auth.middleware.js";
+import { IJwtService } from "../common/jwt/jwt.service.interface.js";
 
 @injectable()
 export class ArticleController extends BaseController implements IArticleController {
+    private authMiddleware: AuthMiddleware;
+    private validationMiddleware: ArticleCreateDto;
+
     constructor(
         @inject(TYPES.LoggerService) logger: ILoggerService,
-        @inject(TYPES.ArticleService) private articleService: IArticleService
+        @inject(TYPES.ArticleService) private articleService: IArticleService,
+        @inject(TYPES.JwtService) private jwtService: IJwtService
     ) {
         super(logger);
+
+        this.authMiddleware = new AuthMiddleware(this.jwtService);
 
         this.bindRouters([
             {
@@ -37,7 +43,7 @@ export class ArticleController extends BaseController implements IArticleControl
                 path: '/article',
                 method: 'post',
                 func: this.addArticle,
-                middleware: [new ValidationMiddleware(ArticleCreateDto)]
+                middleware: [new ValidationMiddleware(ArticleCreateDto), this.authMiddleware]
             },
             {
                 path: '/article/:id',

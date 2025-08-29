@@ -17,7 +17,7 @@ CREATE TABLE "UserModel" (
     "password" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "age" INTEGER NOT NULL,
-    "isBloced" BOOLEAN NOT NULL,
+    "isBlocked" BOOLEAN NOT NULL,
     "createdAt" DATETIME NOT NULL
 );
 

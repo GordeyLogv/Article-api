@@ -4,4 +4,6 @@ export interface IConfigService {
     readonly port: number;
     readonly host: string;
     readonly salt: number;
+    readonly secretJwt: string;
+    readonly expiresInSecond: number;
 }

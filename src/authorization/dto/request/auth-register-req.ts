@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 
-export class UserRegisterDto {
+export class AuthRegisterReqDto {
     @IsString()
     @IsNotEmpty({ message: 'Email не должен быть пустым'})
     email: string;

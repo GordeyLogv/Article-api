@@ -15,10 +15,14 @@ import { IArticleService } from "./article/service/article.service.interface.js"
 import { IArticleController } from "./article/article.controller.interface.js";
 import { ArticleController } from "./article/article.controller.js";
 import { ArticleService } from "./article/service/article.service.js";
-import { IUserRepository } from "./user/repository/user.repository.interface.js";
-import { UserRepository } from "./user/repository/user.repository.js";
-import { IUserService } from "./user/service/user.service.interface.js";
-import { UserService } from "./user/service/user.service.js";
+import { AuthRepository } from "./authorization/repository/auth.repository.js";
+import { IAuthService } from "./authorization/service/auth.service.interface.js";
+import { AuthService } from "./authorization/service/auth.service.js";
+import { IAuthController } from "./authorization/auth.contoller.interface.js";
+import { IAuthRepository } from "./authorization/repository/auth.repository.interface.js";
+import { AuthController } from "./authorization/auth.controller.js";
+import { IJwtService } from "./common/jwt/jwt.service.interface.js";
+import { JwtService } from "./common/jwt/jwt.service.js";
 
 
 const bootstrap = () => {
@@ -32,8 +36,10 @@ const bootstrap = () => {
     appContainer.bind<IArticleRepository>(TYPES.ArticleRepository).to(ArticleRepository);
     appContainer.bind<IArticleService>(TYPES.ArticleService).to(ArticleService);
     appContainer.bind<IArticleController>(TYPES.ArticleController).to(ArticleController);
-    appContainer.bind<IUserRepository>(TYPES.UserRepository).to(UserRepository);
-    appContainer.bind<IUserService>(TYPES.UserService).to(UserService);
+    appContainer.bind<IAuthRepository>(TYPES.AuthRepository).to(AuthRepository);
+    appContainer.bind<IAuthService>(TYPES.AuthService).to(AuthService);
+    appContainer.bind<IAuthController>(TYPES.AuthController).to(AuthController);
+    appContainer.bind<IJwtService>(TYPES.JwtService).to(JwtService);
 
     const app = appContainer.get<App>(TYPES.Application);
 

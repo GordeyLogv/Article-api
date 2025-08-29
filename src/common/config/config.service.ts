@@ -61,4 +61,18 @@ export class ConfigService implements IConfigService {
 
         return SALT;
     }
+
+    get secretJwt(): string {
+        return this.get('SECRET_ACCESS_TOKEN');
+    }
+
+    get expiresInSecond(): number {
+        const expires = Number(this.get('EXPIRESINSECOND'));
+
+        if (isNaN(expires)) {
+            this.logger.error(`[ConfigService] - Expires не число : ${expires}`);
+            throw new HTTPError(500, `Expires не число : ${expires}`, 'ConfigService');
+        };
+        return expires;
+    }
 }

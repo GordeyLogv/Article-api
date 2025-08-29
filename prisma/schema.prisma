@@ -24,6 +24,6 @@ model UserModel {
   password String
   name String
   age Int
-  isBloced Boolean
+  isBlocked Boolean
   createdAt DateTime
 }
